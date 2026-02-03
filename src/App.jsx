@@ -18,7 +18,7 @@ function App() {
   // --- VERİ ÇEKME ---
   const fetchMedia = async () => {
     try {
-      const response = await fetch('http://https://media-tracker-api.onrender.com/host:5000/api/media');
+      const response = await fetch('https://media-tracker-api.onrender.com/api/media');
       const data = await response.json();
       setMediaList(data);
       setLoading(false);
@@ -66,7 +66,7 @@ function App() {
       {/* --- HEADER ALANI --- */}
       <header className="max-w-7xl mx-auto mb-8">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Media Tracker
           </h1>
           <button onClick={handleAddNew} className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl font-medium shadow-lg shadow-blue-600/20 transition-all active:scale-95">
