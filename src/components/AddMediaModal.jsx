@@ -63,8 +63,8 @@ const AddMediaModal = ({ isOpen, onClose, onRefresh, editData }) => {
     setLoading(true);
     try {
       const url = editData 
-        ? `https://media-tracker-api.onrender.com${editData._id}` 
-        : 'https://media-tracker-api.onrender.com';
+        ? `https://media-tracker-api.onrender.com/api/media/${editData._id}` 
+        : 'https://media-tracker-api.onrender.com/api/media';
       const method = editData ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
