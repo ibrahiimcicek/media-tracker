@@ -32,7 +32,7 @@ function App() {
   const handleDelete = async (id) => {
     if (!window.confirm("Silmek istediğine emin misin?")) return;
     try {
-      await fetch(`https://media-tracker-api.onrender.com${id}`, { method: 'DELETE' });
+      await fetch(`https://media-tracker-api.onrender.com/api/media/${id}`, { method: 'DELETE' });
       setMediaList(mediaList.filter(m => m._id !== id));
     } catch (error) { console.error(error); }
   };
