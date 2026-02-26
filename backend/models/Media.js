@@ -32,6 +32,9 @@ const MediaSchema = new mongoose.Schema({
   imageUrl: {
     type: String,
     default: ''
+  },
+  user: {
+    type: String
   }
 }, { timestamps: true }); // Kayıt ve güncelleme tarihini otomatik tutar
 
