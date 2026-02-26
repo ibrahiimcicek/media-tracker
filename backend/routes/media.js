@@ -7,6 +7,17 @@ const authMiddleware = require("../middleware/authMiddleware");
 // 1. TÜM LİSTEYİ GETİR (GET)
 // http://localhost:5000/api/media adresine istek gelince çalışır
 
+//  ADMİN ROTASI: Tüm kullanıcıların medyalarını getir
+router.get("/admin/all", async (req, res) => {
+  try {
+    // Tüm medyaları bul ve 'userId' referansından kullanıcının adını/emailini çek
+    // Not: Modelindeki kullanıcı referansının adının 'userId' veya 'user' olduğuna dikkat et.
+    const allMedia = await Media.find().populate("userId", "username email");
+    res.status(200).json(allMedia);
+  } catch (error) {
+    res.status(500).json({ message: "Sunucu hatası", error });
+  }
+});
 router.get("/", authMiddleware, async (req, res) => {
   try {
     const media = await Media.find({ user: req.user.id });

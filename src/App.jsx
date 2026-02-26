@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Auth from "./components/Auth";
 import { Trash2, Edit2, Search, Filter, LogOut } from "lucide-react";
 import AddMediaModal from "./components/AddMediaModal";
+import AdminDashboard from "./components/AdminDashboard";
 
 function App() {
   // 1. TÜM STATE'LER (HOOK'LAR) EN ÜSTTE OLMALIDIR
@@ -16,6 +17,7 @@ function App() {
   const [editingItem, setEditingItem] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("All");
+  const [showAdmin, setShowAdmin] = useState(false);
 
   // 2. FONKSİYONLAR
   const fetchMedia = async () => {
@@ -139,6 +141,12 @@ function App() {
               >
                 <LogOut size={18} />
                 Çıkış
+              </button>
+              <button
+                onClick={() => setShowAdmin(true)}
+                className="bg-slate-800 hover:bg-slate-900 text-white px-4 py-2.5 rounded-xl font-medium transition-all"
+              >
+                Admin Panel
               </button>
             </div>
           </div>
@@ -290,6 +298,9 @@ function App() {
           </>
         )}
       </div>
+      {showAdmin && (
+        <AdminDashboard token={token} onClose={() => setShowAdmin(false)} />
+      )}
     </div>
   );
 }
