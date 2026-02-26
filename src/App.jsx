@@ -6,7 +6,7 @@ import AddMediaModal from "./components/AddMediaModal";
 function App() {
   // 1. TÜM STATE'LER (HOOK'LAR) EN ÜSTTE OLMALIDIR
   const [token, setToken] = useState(localStorage.getItem("token"));
-  
+
   // YENİ: Tarayıcı hafızasından kullanıcı bilgisini çekiyoruz
   const storedUser = JSON.parse(localStorage.getItem("user"));
 
@@ -20,16 +20,33 @@ function App() {
   // 2. FONKSİYONLAR
   const fetchMedia = async () => {
     try {
-      const response = await fetch("https://media-tracker-api.onrender.com/api/media/", {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await fetch(
+        "https://media-tracker-api.onrender.com/api/media",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
+
+      // 1. GÜVENLİK DUVARI: Eğer token geçersizse (401) direkt çıkış yap ve çökmesini engelle
+      if (response.status === 401) {
+        handleLogout();
+        return; // Fonksiyonu burada kes
+      }
+
       const data = await response.json();
-      setMediaList(data);
+
+      // 2. GÜVENLİK DUVARI: Gelen veri gerçekten bir dizi (array) mi kontrol et
+      if (Array.isArray(data)) {
+        setMediaList(data);
+      } else {
+        setMediaList([]); // Dizi değilse boş bırak ki filter() fonksiyonu çökmesin
+      }
+
       setLoading(false);
     } catch (error) {
-      console.error("Hata:", error);
+      console.error("Veri çekme hatası:", error);
       setLoading(false);
     }
   };
@@ -89,7 +106,6 @@ function App() {
   // 6. GİRİŞ YAPILMIŞSA ANA UYGULAMAYI GÖSTER
   return (
     <div className="min-h-screen bg-slate-50 p-8 font-sans text-slate-900">
-      
       <header className="max-w-7xl mx-auto mb-8">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
           <h1 className="text-3xl font-bold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -98,12 +114,15 @@ function App() {
 
           {/* YENİ: Kullanıcı Bilgisi ve Butonlar Yan Yana */}
           <div className="flex items-center gap-4">
-            
             {/* Sadece kullanıcı bilgisi varsa bu kısmı göster */}
             {storedUser && (
               <div className="hidden sm:flex flex-col items-end pr-4 border-r border-slate-200">
-                <span className="text-xs text-slate-500 font-medium uppercase tracking-wider">Hoş geldin</span>
-                <span className="text-base font-bold text-slate-800">{storedUser.username}</span>
+                <span className="text-xs text-slate-500 font-medium uppercase tracking-wider">
+                  Hoş geldin
+                </span>
+                <span className="text-base font-bold text-slate-800">
+                  {storedUser.username}
+                </span>
               </div>
             )}
 
@@ -169,7 +188,7 @@ function App() {
         onClose={() => setIsModalOpen(false)}
         onRefresh={fetchMedia}
         editData={editingItem}
-        token={token} 
+        token={token}
       />
 
       <div className="max-w-7xl mx-auto">
